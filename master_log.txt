@@ -1,0 +1,24 @@
+[2026-04-08T22:30:21+00:00] [Master Master_A] TASK-> Worker=d0381349-c9f1-467c-91e0-8de239597097 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-04-08T22:30:23+00:00] [Master Master_A] STATUS<- Worker=d0381349-c9f1-467c-91e0-8de239597097 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-04-08T22:30:23+00:00] [Master Master_A] TASK-> Worker=d0381349-c9f1-467c-91e0-8de239597097 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-04-08T22:30:24+00:00] [Master Master_A] STATUS<- Worker=d0381349-c9f1-467c-91e0-8de239597097 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-04-08T22:33:29+00:00] [Master Master_A] TASK-> Worker=98ede8b8-f873-4c33-804c-490d971342bd Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-04-08T22:33:30+00:00] [Master Master_A] STATUS<- Worker=98ede8b8-f873-4c33-804c-490d971342bd Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-04-08T22:33:30+00:00] [Master Master_A] TASK-> Worker=98ede8b8-f873-4c33-804c-490d971342bd Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-04-08T22:33:32+00:00] [Master Master_A] STATUS<- Worker=98ede8b8-f873-4c33-804c-490d971342bd Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:31:30+00:00] [Master Master_A] TASK-> Worker=W-INTEGRATION-TEST Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:31:31+00:00] [Master Master_A] STATUS<- Worker=W-INTEGRATION-TEST Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:31:31+00:00] [Master Master_A] TASK-> Worker=W-INTEGRATION-TEST Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:31:32+00:00] [Master Master_A] STATUS<- Worker=W-INTEGRATION-TEST Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:33:34+00:00] [Master Master_A] TASK-> Worker=W-TEST-001 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:33:35+00:00] [Master Master_A] STATUS<- Worker=W-TEST-001 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:33:35+00:00] [Master Master_A] TASK-> Worker=W-TEST-001 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:33:36+00:00] [Master Master_A] STATUS<- Worker=W-TEST-001 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:36:50+00:00] [Master Master_A] TASK-> Worker=938baf89-4a7b-4e63-ae10-14842f02554d Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:36:50+00:00] [Master Master_A] STATUS<- Worker=938baf89-4a7b-4e63-ae10-14842f02554d Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:36:50+00:00] [Master Master_A] TASK-> Worker=938baf89-4a7b-4e63-ae10-14842f02554d Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:36:52+00:00] [Master Master_A] STATUS<- Worker=938baf89-4a7b-4e63-ae10-14842f02554d Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:55:28+00:00] [Master Master_A] TASK-> Worker=WORKER_1 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:55:29+00:00] [Master Master_A] STATUS<- Worker=WORKER_1 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Michel'}
+[2026-05-04T23:55:29+00:00] [Master Master_A] TASK-> Worker=WORKER_1 Origem=LOCAL Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
+[2026-05-04T23:55:30+00:00] [Master Master_A] STATUS<- Worker=WORKER_1 Origem=LOCAL Status=OK Tarefa={'TASK': 'QUERY', 'USER': 'Julia'}
