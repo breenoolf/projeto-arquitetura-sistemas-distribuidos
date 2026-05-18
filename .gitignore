@@ -9,3 +9,7 @@ venv/
 # OS/editor
 .DS_Store
 .vscode/
+
+# Logs
+*.log
+master_log.txt
