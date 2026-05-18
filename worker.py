@@ -211,6 +211,8 @@ async def iniciar_worker(master_host: str = '127.0.0.1', master_porta: int = 888
     
     Parameters are kept for backward compatibility but are IGNORED in Sprint 2.1.
     """
+    global WORKER_ORIGIN_SERVER_UUID
+    
     while True:
         try:
             # === PHASE 1: DISCOVERY ===

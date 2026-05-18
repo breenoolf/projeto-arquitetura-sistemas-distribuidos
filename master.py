@@ -137,8 +137,9 @@ async def discovery_server(
 
 
 async def tratar_conexao(reader, writer):
+    global current_load, connected_workers, borrowed_workers_lock, current_load_lock, connected_workers_lock, task_queue_lock, TASK_QUEUE, p2p_manager
+    
     endereco = writer.get_extra_info('peername')
-    print(f"[Master] Nova conexão de {endereco}")
 
     worker_origem: dict[str, str | None] = {}
     worker_em_execucao: dict[str, dict] = {}
@@ -151,16 +152,12 @@ async def tratar_conexao(reader, writer):
             print(f"[Master] {endereco} desconectou sem enviar mensagem")
             return
         
-        print(f"[Master] Primeira mensagem recebida: {primeira_msg}")
-        
         if primeira_msg.get("TYPE") == "ELECTION_ACK":
             # Sprint 2.1: Handshake com eleição
             exigir_campos(primeira_msg, ["TYPE", "WORKER_UUID", "SELECTED_MASTER"])
             
             worker_uuid = str(primeira_msg["WORKER_UUID"])
             selected_master = str(primeira_msg["SELECTED_MASTER"])
-            
-            print(f"[Master] ELECTION_ACK recebido de {worker_uuid} (eleito: {selected_master})")
             
             # Verify this Worker selected us
             if selected_master != MASTER_NAME:
@@ -174,7 +171,6 @@ async def tratar_conexao(reader, writer):
                 "MASTER_NAME": MASTER_NAME,
             }
             await enviar_mensagem(writer, ack_response)
-            print(f"[Master] ELECTION_ACK: Aceito {worker_uuid}")
             primeira_msg = None
         
         # === PHASE 2: Heartbeat loop (Sprint 1 compatible) ===
@@ -187,8 +183,6 @@ async def tratar_conexao(reader, writer):
                 mensagem = await receber_mensagem(reader)
                 if not mensagem:
                     break
-            
-            print(f"[Master] Recebido: {mensagem}")
 
             # Compatibilidade Sprint 1 (Heartbeat)
             if mensagem.get("TASK") == "HEARTBEAT":
@@ -230,11 +224,12 @@ async def tratar_conexao(reader, writer):
                         worker_em_execucao[worker_uuid] = tarefa
                         await enviar_mensagem(writer, tarefa)
                         _log_linha(f"[{_agora_iso()}] [Master {MASTER_UUID}] TASK-> Worker={worker_uuid} Origem={worker_origem[worker_uuid] or 'LOCAL'} Tarefa={tarefa}")
+                        
+                        # Incrementar carga apenas quando realmente enviamos uma tarefa
+                        with current_load_lock:
+                            current_load += 1
                     else:
                         await enviar_mensagem(writer, {"TASK": "NO_TASK"})
-                
-                with current_load_lock:
-                    current_load += 1
                 
                 continue
 
@@ -292,7 +287,6 @@ async def tratar_conexao(reader, writer):
                 connected_workers.pop(worker_uuid_connected, None)
             _log_linha(f"[{_agora_iso()}] [Master {MASTER_UUID}] WORKER_DISCONNECTED: worker_id={worker_uuid_connected}")
         
-        print(f"[Master] Fechando conexão com {endereco}")
         writer.close()
         await writer.wait_closed()
 

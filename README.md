@@ -423,6 +423,71 @@ Para documentação técnica detalhada, consulte:
 
 ---
 
+## 🧪 Como Testar Sprint 3
+
+### Teste Rápido: Master + 1 Worker
+
+**Terminal 1:**
+```bash
+python master.py
+```
+
+**Terminal 2:**
+```bash
+$env:WORKER_UUID='W-001'
+python worker.py
+```
+
+Você deve ver:
+- Worker faz Discovery UDP
+- Worker eleita MASTER_A via Election
+- Worker conecta via TCP Handshake
+- Worker recebe 2 tarefas e executa
+- Worker aguarda mais tarefas em ciclos de heartbeat
+
+### Teste Completo: Master + 3 Workers (Paralelo)
+
+**Terminal 1:**
+```bash
+python master.py
+```
+
+**Terminal 2:**
+```bash
+python test_integration_level3.py
+```
+
+Este teste simula 3 Workers em paralelo:
+- Discovery UDP simultâneo
+- Election lexicográfica
+- Handshake TCP para todos
+- Distribuição de 2 tarefas entre 3 Workers
+- 5 ciclos de heartbeat por Worker
+
+**Resultado esperado:**
+```
+============================================================
+✅ TESTE PASSOU!
+```
+
+### Teste Unitário: Componentes Sprint 3
+
+```bash
+python test_sprint3.py
+```
+
+Testa em isolamento:
+- Manager P2P (vizinhos, empréstimos)
+- Formatos de mensagens (request_help, command_redirect, etc.)
+- Persistência de estado
+
+**Resultado esperado:**
+```
+Ran 9 tests ... OK
+```
+
+---
+
 ## 🚀 Próximos Passos
 
 1. Testes de integração com múltiplos Masters
