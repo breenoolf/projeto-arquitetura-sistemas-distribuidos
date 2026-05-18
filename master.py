@@ -273,8 +273,9 @@ async def tratar_conexao(reader, writer):
                 # O Worker gerencia isto, não o Master
                 continue
 
-            # Se cair aqui, é um payload desconhecido: strict parsing.
-            raise ProtocolError("Payload desconhecido")
+            # Se cair aqui, é um payload desconhecido: ignora (tolerância a interoperabilidade)
+            # Permite que outros grupos enviem mensagens com tipos não reconhecidos
+            continue
                 
     except ProtocolError as e:
         print(f"[Master] Erro de protocolo com {endereco}: {e}")

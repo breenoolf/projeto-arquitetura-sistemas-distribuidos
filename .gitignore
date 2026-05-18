@@ -13,3 +13,6 @@ venv/
 # Logs
 *.log
 master_log.txt
+
+#env
+.env

@@ -35,7 +35,7 @@ async def receber_mensagem(reader) -> dict[str, Any] | None:
 
 
 def exigir_campos(payload: dict[str, Any], campos: Iterable[str]) -> None:
-    """Falha se algum campo obrigatório estiver ausente (strict parsing)."""
+    """Valida campos obrigatórios. Tolera campos extras (interoperabilidade com outras linguagens)."""
     ausentes = [c for c in campos if c not in payload]
     if ausentes:
         raise ProtocolError(f"Campos obrigatórios ausentes: {', '.join(ausentes)}")
