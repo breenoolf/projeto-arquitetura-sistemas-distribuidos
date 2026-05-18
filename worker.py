@@ -273,6 +273,99 @@ async def iniciar_worker(master_host: str = '127.0.0.1', master_porta: int = 888
                 if not resposta:
                     raise ConnectionError("Conexão encerrada pelo Master")
 
+                # Sprint 3: Suporte a command_redirect (Master vizinho redireciona este Worker)
+                if resposta.get("type") == "command_redirect":
+                    print("[Worker] === SPRINT 3: command_redirect recebido ===")
+                    exigir_campos(resposta, ["type", "payload"])
+                    payload = resposta.get("payload", {})
+                    new_master_address = payload.get("new_master_address")
+                    
+                    if not new_master_address:
+                        raise ProtocolError("Faltando new_master_address em command_redirect")
+                    
+                    print(f"[Worker] Redirecionamento para {new_master_address}")
+                    
+                    # Guardar Master atual como "origem"
+                    old_master = WORKER_ORIGIN_SERVER_UUID or "ORIGINAL"
+                    
+                    # Desconectar do Master atual
+                    if writer:
+                        writer.close()
+                        try:
+                            await writer.wait_closed()
+                        except:
+                            pass
+                    
+                    # Parse novo endereço (ip:port)
+                    parts = new_master_address.split(":")
+                    if len(parts) != 2:
+                        raise ProtocolError(f"Formato inválido para endereço: {new_master_address}")
+                    
+                    new_ip, new_port = parts[0], int(parts[1])
+                    
+                    # Conectar ao novo Master
+                    try:
+                        reader, writer = await asyncio.wait_for(
+                            asyncio.open_connection(new_ip, new_port),
+                            timeout=MASTER_RESPONSE_TIMEOUT_S
+                        )
+                        print(f"[Worker] Conectado ao novo Master em {new_ip}:{new_port}")
+                        
+                        # Atualizar WORKER_ORIGIN_SERVER_UUID para o Master anterior
+                        # Este será enviado no próximo ALIVE para identificar Workers emprestados
+                        # A lógica aqui é: o Worker sabe seu Master original e depois que reconecta,
+                        # passa isso via SERVER_UUID
+                        
+                    except Exception as e:
+                        raise ConnectionError(f"Falha conectando ao novo Master: {e}")
+                    
+                    # Continuar loop (será enviado ALIVE no próximo ciclo com SERVER_UUID)
+                    continue
+                
+                # Sprint 3: Suporte a command_release (retornar ao Master original)
+                if resposta.get("type") == "command_release":
+                    print("[Worker] === SPRINT 3: command_release recebido ===")
+                    exigir_campos(resposta, ["type", "payload"])
+                    payload = resposta.get("payload", {})
+                    original_master_address = payload.get("original_master_address")
+                    
+                    if not original_master_address:
+                        raise ProtocolError("Faltando original_master_address em command_release")
+                    
+                    print(f"[Worker] Retornando ao Master original em {original_master_address}")
+                    
+                    # Desconectar do Master atual
+                    if writer:
+                        writer.close()
+                        try:
+                            await writer.wait_closed()
+                        except:
+                            pass
+                    
+                    # Parse endereço do Master original
+                    parts = original_master_address.split(":")
+                    if len(parts) != 2:
+                        raise ProtocolError(f"Formato inválido para endereço: {original_master_address}")
+                    
+                    orig_ip, orig_port = parts[0], int(parts[1])
+                    
+                    # Conectar ao Master original
+                    try:
+                        reader, writer = await asyncio.wait_for(
+                            asyncio.open_connection(orig_ip, orig_port),
+                            timeout=MASTER_RESPONSE_TIMEOUT_S
+                        )
+                        print(f"[Worker] Reconectado ao Master original em {orig_ip}:{orig_port}")
+                        
+                        # Limpar SERVER_UUID para voltar a ser um Worker local
+                        WORKER_ORIGIN_SERVER_UUID = None
+                        
+                    except Exception as e:
+                        raise ConnectionError(f"Falha conectando ao Master original: {e}")
+                    
+                    # Continuar loop
+                    continue
+
                 # Compatibilidade Sprint 1 (caso o Master ainda responda heartbeat)
                 if resposta.get("TASK") == "HEARTBEAT":
                     if resposta.get("RESPONSE") == "ALIVE":

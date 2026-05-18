@@ -9,8 +9,3 @@ venv/
 # OS/editor
 .DS_Store
 .vscode/
-/skills/
-
-# Environment variables (keep .env.example for docs)
-.env
-.env.local
